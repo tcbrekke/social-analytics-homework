@@ -27,51 +27,52 @@ sns.set()
 checked_list = []
 most_recent_tweet = 0
 
-for status in tweepy.Cursor(api.search, q="Analyze AND @tcbbot OR analyze AND @tcbbot", tweet_mode='extended').items(5):
-    tweet = status._json
-    
-    stripped_tweet = tweet['full_text'].strip('@tcbbot ')
-    split_tweet = stripped_tweet.split(' ')
-    target_user = split_tweet[-1].strip('@')
-    
-    
-    mentioner = tweet['user']['screen_name'].replace("'", "")
-    
-    
-    try:
-        if target_user in set(checked_list):
-            if tweet['id'] > most_recent_tweet:
-                api.update_status(f"Sorry @{mentioner}, someone has already plotted that.")
-                most_recent_tweet = tweet['id']
-        else:
-            compound_list = []
-            for status in tweepy.Cursor(api.user_timeline, id=target_user, tweet_mode='extended').items(500):
-                target_user_tweet = status._json
-                results = analyzer.polarity_scores(target_user_tweet["full_text"])
-                compound = results["compound"]
-                compound_list.append(compound)
+while True:
+	for status in tweepy.Cursor(api.search, q="Analyze AND @tcbbot OR analyze AND @tcbbot", tweet_mode='extended').items(5):
+	    tweet = status._json
+	    
+	    stripped_tweet = tweet['full_text'].strip('@tcbbot ')
+	    split_tweet = stripped_tweet.split(' ')
+	    target_user = split_tweet[-1].strip('@')
+	    
+	    
+	    mentioner = tweet['user']['screen_name'].replace("'", "")
+	    
+	    
+	    try:
+	        if target_user in set(checked_list):
+	            if tweet['id'] > most_recent_tweet:
+	                api.update_status(f"Sorry @{mentioner}, someone has already plotted that.")
+	                most_recent_tweet = tweet['id']
+	        else:
+	            compound_list = []
+	            for status in tweepy.Cursor(api.user_timeline, id=target_user, tweet_mode='extended').items(500):
+	                target_user_tweet = status._json
+	                results = analyzer.polarity_scores(target_user_tweet["full_text"])
+	                compound = results["compound"]
+	                compound_list.append(compound)
 
-            user_plot, comp = plt.subplots(figsize=(20, 10))
+	            user_plot, comp = plt.subplots(figsize=(20, 10))
 
-            plot_title_fonts = {'family':'sans-serif', 'size':18}
+	            plot_title_fonts = {'family':'sans-serif', 'size':18}
 
-            x_axis = len(compound_list)
-        
-            comp.set_title(f"Sentiment of @{target_user}'s Past {x_axis} Tweets", fontdict=plot_title_fonts)
-            comp.set_xlabel('Tweets (from oldest to newest)', fontdict=plot_title_fonts)
-            comp.set_ylabel('Compound Sentiment (VADER)', fontdict=plot_title_fonts)
-            comp.set_xlim(0,x_axis)
-            comp.set_ylim(-1,1)
+	            x_axis = len(compound_list)
+	        
+	            comp.set_title(f"Sentiment of @{target_user}'s Past {x_axis} Tweets", fontdict=plot_title_fonts)
+	            comp.set_xlabel('Tweets (from oldest to newest)', fontdict=plot_title_fonts)
+	            comp.set_ylabel('Compound Sentiment (VADER)', fontdict=plot_title_fonts)
+	            comp.set_xlim(0,x_axis)
+	            comp.set_ylim(-1,1)
 
-            plot_filename = f"{target_user}_{x_axis}_sentiment_plot.png"
-            plot_path = os.path.join("saved-figs", plot_filename)
-            comp.plot(range(x_axis), compound_list, marker='o', color='red', mec='black', alpha=0.5)
-            plt.savefig(plot_path, dpi=300)
+	            plot_filename = f"{target_user}_{x_axis}_sentiment_plot.png"
+	            plot_path = os.path.join("saved-figs", plot_filename)
+	            comp.plot(range(x_axis), compound_list, marker='o', color='red', mec='black', alpha=0.5)
+	            plt.savefig(plot_path, dpi=300)
 
-            api.update_with_media(f"{plot_path}",
-                            f"Here is your plot of the compound sentiment for @{target_user}'s past {x_axis} tweets:")
-            checked_list.append(target_user)
-    except Exception:
-        continue
+	            api.update_with_media(f"{plot_path}",
+	                            f"Here is your plot of the compound sentiment for @{target_user}'s past {x_axis} tweets:")
+	            checked_list.append(target_user)
+	    except Exception:
+	        pass
 
-time.sleep(300)
+	time.sleep(300)

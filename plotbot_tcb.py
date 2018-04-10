@@ -24,10 +24,13 @@ api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 sns.set()
 
-checked_list = []
-most_recent_tweet = 0
+checked_users_list = []
+rejected_request_id_list = []
+most_recent_tweet = 1
 
-while True:
+
+while most_recent_tweet > 0:
+
 	for status in tweepy.Cursor(api.search, q="Analyze AND @tcbbot OR analyze AND @tcbbot", tweet_mode='extended').items(5):
 	    tweet = status._json
 	    
@@ -40,10 +43,13 @@ while True:
 	    
 	    
 	    try:
-	        if target_user in set(checked_list):
-	            if tweet['id'] > most_recent_tweet:
-	                api.update_status(f"Sorry @{mentioner}, someone has already plotted that.")
-	                most_recent_tweet = tweet['id']
+	        if target_user in set(checked_user_list):
+	        	if tweet['id'] > most_recent_tweet:
+		            if tweet['id'] not in set(rejected_request_id_list):
+		                api.update_status(f"{target_user}_sentiment_plot.png", 
+		                	f"Uh oh, @{mentioner}! Someone has already plotted . Here's the plot I generated for that.")
+		                most_recent_tweet = tweet['id']
+		                rejected_request_id_list.append(tweet['id'])
 	        else:
 	            compound_list = []
 	            for status in tweepy.Cursor(api.user_timeline, id=target_user, tweet_mode='extended').items(500):
@@ -64,14 +70,15 @@ while True:
 	            comp.set_xlim(0,x_axis)
 	            comp.set_ylim(-1,1)
 
-	            plot_filename = f"{target_user}_{x_axis}_sentiment_plot.png"
+	            plot_filename = f"{target_user}_sentiment_plot.png"
 	            plot_path = os.path.join("saved-figs", plot_filename)
 	            comp.plot(range(x_axis), compound_list, marker='o', color='red', mec='black', alpha=0.5)
 	            plt.savefig(plot_path, dpi=300)
 
 	            api.update_with_media(f"{plot_path}",
 	                            f"Here is your plot of the compound sentiment for @{target_user}'s past {x_axis} tweets:")
-	            checked_list.append(target_user)
+	            checked_user_list.append(target_user)
+	            most_recent_tweet = tweet['id']
 	    except Exception:
 	        pass
 

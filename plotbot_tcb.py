@@ -3,9 +3,9 @@ import numpy as np
 import pandas
 import os
 import re
-import seaborn as sns
 from matplotlib import pyplot as plt
-import threading
+matplotlib.use('Agg')
+import seaborn as sns
 import time
 
 access_token = os.environ.get('access_token')

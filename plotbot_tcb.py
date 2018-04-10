@@ -5,6 +5,7 @@ import os
 import re
 import seaborn as sns
 from matplotlib import pyplot as plt
+import threading
 
 access_token = os.enviroon.get('access_token')
 access_token_secret = os.environ.get('access_token_secret')

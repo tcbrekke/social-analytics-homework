@@ -55,7 +55,7 @@ for status in tweepy.Cursor(api.search, q="Analyze AND @tcbbot OR analyze AND @t
             comp.set_title(f"Sentiment of @{target_user}'s Past 500 Tweets", fontdict=plot_title_fonts)
             comp.set_xlabel('Tweets (from oldest to newest)', fontdict=plot_title_fonts)
             comp.set_ylabel('Compound Sentiment (VADER)', fontdict=plot_title_fonts)
-            comp.set_xlim(0,500)
+            comp.set_xlim(0,len(compound_list))
             comp.set_ylim(-1,1)
 
             plot_filename = f"{target_user}_500_sentiment_plot.png"

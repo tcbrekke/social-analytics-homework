@@ -6,10 +6,15 @@ import re
 import seaborn as sns
 from matplotlib import pyplot as plt
 
-from config import (consumer_key,
-                    consumer_secret,
-                    access_token,
-                    access_token_secret)  
+os.environ.get('access_token')
+os.environ.get('access_token_secret')
+os.environ.get('consumer_key')
+os.environ.get('consumer_secret')
+
+#from config import (consumer_key,
+#                   consumer_secret,
+#                    access_token,
+#                    access_token_secret)  
                     
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 analyzer = SentimentIntensityAnalyzer()

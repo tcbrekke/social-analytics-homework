@@ -24,7 +24,7 @@ api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 sns.set()
 
-checked_users_list = []
+checked_user_list = []
 rejected_request_id_list = []
 most_recent_tweet = 1
 

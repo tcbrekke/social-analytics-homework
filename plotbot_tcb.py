@@ -52,6 +52,7 @@ while most_recent_tweet > 0:
 					compound = results["compound"]
 					compound_list.append(compound)
 
+				print('Sentiment data collected')
 				user_plot, comp = plt.subplots(figsize=(20, 10))
 
 				plot_title_fonts = {'family':'sans-serif', 'size':18}
@@ -68,11 +69,11 @@ while most_recent_tweet > 0:
 				plot_path = os.path.join("saved-figs", plot_filename)
 				comp.plot(range(x_axis), compound_list, marker='o', color='red', mec='black', alpha=0.5)
 				plt.savefig(plot_path, dpi=144)
-
+				print("Plot generated")
 				api.update_with_media(f"{plot_path}", f"Here is your plot of the compound sentiment for @{target_user}'s past {x_axis} tweets:")
 				checked_user_list.append(target_user)
 				most_recent_tweet = tweet['id']
-
+				print("Plot posted")
 			elif (target_user in checked_user_list) == True:
 				if tweet['id'] > most_recent_tweet:
 					if (tweet['id'] not in rejected_request_id_list) == True:
@@ -80,6 +81,7 @@ while most_recent_tweet > 0:
 							f"Uh oh, @{mentioner}! Someone has already plotted . Here's the plot I generated for that.")
 						most_recent_tweet = tweet['id']
 						rejected_request_id_list.append(tweet['id'])
+						print('Duplicate detected - tweet replied to with rejection of request')
 						continue
 					else:
 						continue

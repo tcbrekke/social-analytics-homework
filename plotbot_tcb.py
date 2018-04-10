@@ -43,7 +43,7 @@ while most_recent_tweet > 0:
 
 		try:
 
-			if target_user not in checked_users_list:
+			if target_user not in checked_user_list:
 				print("New user found")
 				compound_list = []
 				for status in tweepy.Cursor(api.user_timeline, id=target_user, tweet_mode='extended').items(500):

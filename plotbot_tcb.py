@@ -30,7 +30,7 @@ most_recent_tweet = 1
 
 while most_recent_tweet > 0:
 
-	for status in tweepy.Cursor(api.search, q="Analyze AND @tcbbot OR analyze AND @tcbbot", tweet_mode='extended').items(5):
+	for status in tweepy.Cursor(api.search, q="Analyze AND @tcbbot OR analyze AND @tcbbot", tweet_mode='extended').items(100):
 		print("Starting the process - finding tweets")
 
 		tweet = status._json

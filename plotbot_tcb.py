@@ -73,7 +73,7 @@ while most_recent_tweet > 0:
 	            plot_filename = f"{target_user}_sentiment_plot.png"
 	            plot_path = os.path.join("saved-figs", plot_filename)
 	            comp.plot(range(x_axis), compound_list, marker='o', color='red', mec='black', alpha=0.5)
-	            plt.savefig(plot_path, dpi=300)
+	            plt.savefig(plot_path, dpi=144)
 
 	            api.update_with_media(f"{plot_path}",
 	                            f"Here is your plot of the compound sentiment for @{target_user}'s past {x_axis} tweets:")

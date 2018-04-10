@@ -6,10 +6,10 @@ import re
 import seaborn as sns
 from matplotlib import pyplot as plt
 
-os.environ.get('access_token')
-os.environ.get('access_token_secret')
-os.environ.get('consumer_key')
-os.environ.get('consumer_secret')
+access_token = os.enviroon.get('access_token')
+access_token_secret = os.environ.get('access_token_secret')
+consumer_key = os.environ.get('consumer_key')
+consumer_secret = os.environ.get('consumer_secret')
 
 #from config import (consumer_key,
 #                   consumer_secret,

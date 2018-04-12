@@ -77,8 +77,7 @@ while most_recent_tweet > 0:
 			elif (target_user in checked_user_list) == True:
 				if tweet['id'] > most_recent_tweet:
 					if (tweet['id'] not in rejected_request_id_list) == True:
-						api.update_status(f"{target_user}_sentiment_plot.png", 
-							f"Uh oh, @{mentioner}! Someone has already plotted . Here's the plot I generated for that.")
+						api.update_status("Uh oh, @{mentioner}! Someone has already plotted {target_user}'s sentiment too recently for me to plot again. Please feel free to try again later!")
 						most_recent_tweet = tweet['id']
 						rejected_request_id_list.append(tweet['id'])
 						print('Duplicate detected - tweet replied to with rejection of request')
